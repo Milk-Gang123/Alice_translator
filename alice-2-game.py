@@ -16,8 +16,13 @@ sessionStorage = {}
 
 
 @app.route('/post', methods=['POST'])
+# Функция получает тело запроса и возвращает ответ.
+# Внутри функции доступен request.json - это JSON, который отправила нам Алиса в запросе POST
 def main():
     logging.info('Request: %r', request.json)
+
+    # Начинаем формировать ответ, согласно документации
+    # мы собираем словарь, который потом при помощи библиотеки json преобразуем в JSON и отдадим Алисе
     response = {
         'session': request.json['session'],
         'version': request.json['version'],
@@ -25,9 +30,16 @@ def main():
             'end_session': False
         }
     }
-    handle_dialog(response, request.json)
-    logging.info('Response: %r', response)
+
+    # Отправляем request.json и response в функцию handle_dialog. Она сформирует оставшиеся поля JSON, которые отвечают
+    # непосредственно за ведение диалога
+    handle_dialog(request.json, response)
+
+    logging.info('Response: %r', request.json)
+
+    # Преобразовываем в JSON и возвращаем
     return json.dumps(response)
+
 
 
 def handle_dialog(req, res):
