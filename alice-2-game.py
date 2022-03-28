@@ -58,8 +58,8 @@ def handle_dialog(req, res):
     if len(phrase) > len(init):
         if phrase[:len(init)] == 'переведи слово' or phrase[:len(init)] == 'переведите слово':
             word = phrase[len(init) - 1:]
-            translated_word = 'apple' # translator.translate(word, src='ru', dest='en')
-            res['response']['text'] = f'{translated_word}'
+            translated_word = translator.translate(word, src='ru', dest='en')
+            res['response']['text'] = f'{translated_word.text}'
         else:
             res['response']['text'] = 'Не поняла команы'
     else:
