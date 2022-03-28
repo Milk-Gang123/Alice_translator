@@ -44,7 +44,8 @@ def main():
 
 def handle_dialog(req, res):
     user_id = req['session']['user_id']
-    init = 'Переведи слово'
+    init1 = 'Переведи слово'
+    init2 = 'Переведите слово'
     if req['session']['new']:
         res['response']['text'] = f'Привет! Что тебе перевести?'
         return
@@ -55,9 +56,13 @@ def handle_dialog(req, res):
     # Если он написал 'ладно', 'куплю', 'покупаю', 'хорошо', то мы считаем, что пользователь не согласился.
     # Подумайте, все ли в этом фрагменте написано "красиво"?\
     phrase = req['request']['original_utterance'].lower()
-    if len(phrase) > len(init):
-        if phrase[:len(init)] == 'переведи слово' or phrase[:len(init)] == 'переведите слово':
-            word = phrase[len(init):]
+    if len(phrase) > len(init1):
+        if phrase[:len(init1)] == 'переведи слово':
+            word = phrase[len(init1):]
+            translated_word = translator.translate(word, src='ru', dest='en')
+            res['response']['text'] = f'{translated_word.text}'
+        elif phrase[:len(init2)] == 'переведите слово':
+            word = phrase[len(init2):]
             translated_word = translator.translate(word, src='ru', dest='en')
             res['response']['text'] = f'{translated_word.text}'
         else:
